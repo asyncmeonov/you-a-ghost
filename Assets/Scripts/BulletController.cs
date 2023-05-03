@@ -29,6 +29,8 @@ public class BulletController : MonoBehaviour
         if (collision.gameObject.tag == "mob")
         {
             //logic to handle hitting a mob
+            collision.gameObject.GetComponent<MobController>().Die();
+            collision.collider.enabled = false;
             DestroyBullet();
         }
 

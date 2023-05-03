@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -12,7 +11,6 @@ public class RandomBrain : Brain
     private Vector2 _movDir = Vector2.down;
     public override void Think(MobController mob)
     {
-        Debug.Log("chase");
         if (_elapsed >= timer)
         {
             _movDir = PickRandomDirection();

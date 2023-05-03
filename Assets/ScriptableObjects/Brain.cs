@@ -1,4 +1,3 @@
-using UnityEditor.Animations;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ai_newBrainDef", menuName = "AI Behaviour/New Brain Definition")]
