@@ -10,11 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08111a384d04ab64180cc2200836102f, type: 3}
-  m_Name: mob_newMobDef
+  m_Name: chase_mob
   m_EditorClassIdentifier: 
-  animController: {fileID: -4376293155609064788, guid: 495e3212e1d856247a3d94630f89668b, type: 3}
   shootFrequency: 1
   shootDelay: 2
   movSpeed: 3
   projectile: {fileID: 11400000, guid: 14f6df4624146ad43be9684de628847d, type: 2}
-  mobBrain: {fileID: 11400000, guid: 447ab4357eccf074ea5d3afadec2d034, type: 2}
+  mobBrain: {fileID: 11400000, guid: 86e60c20c717e4e418bc84f5a7717348, type: 2}

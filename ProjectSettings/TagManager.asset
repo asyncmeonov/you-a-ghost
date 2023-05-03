@@ -9,6 +9,7 @@ TagManager:
   - player
   - nozzle
   - anchor
+  - spawn_point
   layers:
   - Default
   - TransparentFX
@@ -19,7 +20,7 @@ TagManager:
   - Mob
   - Player
   - Bullet
-  - 
+  - Monster Bullet
   - 
   - 
   - 

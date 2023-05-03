@@ -18,28 +18,23 @@ public class MobController : MonoBehaviour
     private GameObject _player;
     private GameObject _weaponContainer;
     private bool _isAlive;
-    private bool _isAnchorTarget;
 
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
     public MobDefinition MobDef { get => mobDef; set => mobDef = value; }
-    public bool IsAnchorTarget { get => _isAnchorTarget; set => _isAnchorTarget = value; }
 
     private void Awake()
     {
         _anim = GetComponent<Animator>();
-        mobDef.animController = _anim;
     }
 
     // Start is called before the first frame update
     void Start()
     {
-
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         _player = GameObject.FindGameObjectWithTag("player");
         _weaponContainer = transform.GetChild(0).gameObject;
         _isAlive = true;
-        _isAnchorTarget = false;
         InvokeRepeating("ShootPlayer", mobDef.shootDelay, mobDef.shootFrequency);
 
     }
@@ -52,7 +47,7 @@ public class MobController : MonoBehaviour
             _anim.SetBool("isMoving", Vector3.Distance(_lastPosition, transform.position) > 0); // slightly buggy, stops occasionally
             _lastPosition = transform.position;
         }
-        else if (!IsAnchorTarget)
+        else if (ReferenceEquals(PlayerController.Instance.PotentialAnchor,gameObject))
         {
             Destroy(gameObject);
         }
@@ -72,9 +67,8 @@ public class MobController : MonoBehaviour
 
     public void Die()
     {
-        Debug.Log("Mob Died");
         _isAlive = false;
-        _isAnchorTarget = true;
+        PlayerController.Instance.PotentialAnchor = gameObject;
         _anim.SetBool("isAlive", false);
         _weaponContainer.SetActive(false);
         CancelInvoke();

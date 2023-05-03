@@ -2,6 +2,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 
 {
+
+    public static PlayerController Instance { get; private set; }
     [SerializeField] private float _tetherLength = 2f;
 
     //Components
@@ -17,6 +19,17 @@ public class PlayerController : MonoBehaviour
 
     public GameObject PotentialAnchor { get => _potentialAnchor; set => _potentialAnchor = value; }
 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+        }
+        else
+        {
+            Instance = this;
+        }
+    }
     void Start()
     {
         _rb = GetComponent<Rigidbody2D>();
