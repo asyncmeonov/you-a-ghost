@@ -15,4 +15,6 @@ MonoBehaviour:
   animController: {fileID: -4376293155609064788, guid: 495e3212e1d856247a3d94630f89668b, type: 3}
   shootFrequency: 1
   shootDelay: 2
+  movSpeed: 3
   projectile: {fileID: 11400000, guid: 14f6df4624146ad43be9684de628847d, type: 2}
+  mobBrain: {fileID: 11400000, guid: 447ab4357eccf074ea5d3afadec2d034, type: 2}

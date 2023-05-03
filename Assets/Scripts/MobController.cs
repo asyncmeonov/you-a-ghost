@@ -5,12 +5,15 @@ public class MobController : MonoBehaviour
     [SerializeField] MobDefinition mobDef;
     [SerializeField] GameObject bulletPrefab;
 
-
+    private Vector2 _movDirection;
     private RuntimeAnimatorController _anim;
     private Rigidbody2D _rb;
     private SpriteRenderer _sr;
     private GameObject _player;
     private Vector3 _projectileOrigin;
+
+    public Rigidbody2D Rb { get => _rb; set => _rb = value; }
+    public MobDefinition MobDef { get => mobDef; set => mobDef = value; }
 
     // Start is called before the first frame update
     void Start()
@@ -20,38 +23,28 @@ public class MobController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         _player = GameObject.FindGameObjectWithTag("player");
-        _projectileOrigin = transform.GetChild(0).GetChild(0).GetChild(0).position; //nasty-ass way for retrieval of inner-most child
-
-
         InvokeRepeating("ShootPlayer", mobDef.shootDelay, mobDef.shootFrequency);
 
     }
 
-    // Update is called once per frame
+    private void Update()
+    {
+        mobDef.mobBrain.Think(this);
+    }
+
     void FixedUpdate()
     {
-        //movement logic TODO
-
-        //Logic for rotating towards player
-        Vector3 playerPos = _player.transform.position;;
+        //Logic for pointing towards player
+        Vector3 playerPos = new Vector3(_player.transform.position.x, _player.transform.position.y + 1f); //offset in y so it shoots at the centre
         Transform containerTransform = transform.GetChild(0).transform;
-        float angle = Mathf.Atan2(playerPos.y - containerTransform.position.y, playerPos.x - containerTransform.position.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        containerTransform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, 1000f * Time.deltaTime);
+        containerTransform.rotation = VectorUtils.GetQuaternionRotationTowards(containerTransform, playerPos);
 
-        //switch (playerPos.x)
-        //{
-        //    case < 0:
-        //        _sr.flipY = true;
-        //        break;
-        //    case > 0:
-        //        _sr.flipY = false;
-        //        break;
-        //}
+        _sr.flipX = playerPos.x <= transform.position.x; //flip sprite to face player
     }
 
     void ShootPlayer()
     {
-       Instantiate(bulletPrefab, _projectileOrigin, Quaternion.identity);
+        _projectileOrigin = transform.GetChild(0).GetChild(0).GetChild(0).position; //nasty-ass way for retrieval of inner-most child
+        Instantiate(bulletPrefab, _projectileOrigin, Quaternion.identity);
     }
 }

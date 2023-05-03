@@ -32,9 +32,7 @@ public class GunController : MonoBehaviour
         //Logic for rotating around mouse
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition); //in-world coordinates for mouse
         mousePos = new Vector3(mousePos.x, mousePos.y, 0);
-        float angle = Mathf.Atan2(mousePos.y - _containerTransform.position.y, mousePos.x - _containerTransform.position.x) * Mathf.Rad2Deg;
-        Quaternion targetRotation = Quaternion.Euler(new Vector3(0, 0, angle));
-        _containerTransform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, _rotSpeed * Time.deltaTime);
+        _containerTransform.rotation = VectorUtils.GetQuaternionRotationTowards(_containerTransform, mousePos, _rotSpeed);
 
         switch (mousePos.x)
         {

@@ -1,7 +1,7 @@
 using UnityEngine;
 
 
-//Responsible for the logic governing bullets from the Player's Gun
+//Responsible for the logic governing bullets from the Monster's Wands
 public class MonsterBulletController : MonoBehaviour
 {
     [SerializeField] ProjectileDefinition projectile;
@@ -15,7 +15,7 @@ public class MonsterBulletController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _player = GameObject.FindGameObjectWithTag("player");
 
-        Vector3 playerPos = _player.transform.position;
+        Vector3 playerPos = new Vector3(_player.transform.position.x, _player.transform.position.y + 1f);
         Vector3 shootDir = playerPos - transform.position;
         Vector3 rotation = transform.position - playerPos;
         _rb.velocity = new Vector2(shootDir.x,shootDir.y).normalized * projectile.speed;
