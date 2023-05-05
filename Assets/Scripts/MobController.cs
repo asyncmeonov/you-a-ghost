@@ -1,3 +1,5 @@
+using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -18,9 +20,11 @@ public class MobController : MonoBehaviour
     private GameObject _player;
     private GameObject _weaponContainer;
     private bool _isAlive;
+    private bool _isAnchor;
 
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
     public MobDefinition MobDef { get => mobDef; set => mobDef = value; }
+    public bool IsAnchor { get => _isAnchor; set => _isAnchor = value; }
 
     private void Awake()
     {
@@ -35,6 +39,7 @@ public class MobController : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("player");
         _weaponContainer = transform.GetChild(0).gameObject;
         _isAlive = true;
+        _isAnchor = false;
         InvokeRepeating("ShootPlayer", mobDef.shootDelay, mobDef.shootFrequency);
 
     }
@@ -47,10 +52,15 @@ public class MobController : MonoBehaviour
             _anim.SetBool("isMoving", Vector3.Distance(_lastPosition, transform.position) > 0); // slightly buggy, stops occasionally
             _lastPosition = transform.position;
         }
-        else if (ReferenceEquals(PlayerController.Instance.PotentialAnchor,gameObject))
+        else if (!_isAnchor && PlayerController.Instance.GetAnchor() != gameObject)
         {
-            Destroy(gameObject);
+            StartCoroutine(Fade(Destroy));
         }
+        else if (!_isAlive && !IsAnchor)
+        {
+            //TODO logic about emphasising potential anchor target - emmision, etc.
+        }
+
     }
 
     void FixedUpdate()
@@ -67,6 +77,12 @@ public class MobController : MonoBehaviour
 
     public void Die()
     {
+        GameObject previosAnchor = PlayerController.Instance.PotentialAnchor;
+        if (previosAnchor != null)
+        {
+            previosAnchor.GetComponent<MobController>().IsAnchor = false;
+        }
+        _isAnchor = true;
         _isAlive = false;
         PlayerController.Instance.PotentialAnchor = gameObject;
         _anim.SetBool("isAlive", false);
@@ -74,6 +90,23 @@ public class MobController : MonoBehaviour
         CancelInvoke();
         _rb.constraints = RigidbodyConstraints2D.FreezeAll;
         _onMobDeath.Invoke();
+    }
+
+    private IEnumerator Fade(Action lastAction = null)
+    {
+        Color c = _sr.material.color;
+        for (float alpha = 1f; alpha >= 0; alpha -= 0.1f)
+        {
+            c.a = alpha;
+            _sr.material.color = c;
+            yield return null;
+        }
+        lastAction.Invoke();
+    }
+
+    void Destroy()
+    {
+        Destroy(gameObject);
     }
 
     void ShootPlayer()

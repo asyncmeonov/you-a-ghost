@@ -35,21 +35,15 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         _tether = GetComponent<LineRenderer>();
-        _anchor = GameObject.FindWithTag("anchor");
-
-        var test = new Vector2(4, 4);
-        Debug.Log(test);
-        Debug.Log(Vector2.ClampMagnitude(test,2));
+        var anchor = GameObject.FindWithTag("anchor");
+        SetAnchor(ref anchor);
     }
 
-    // Update is called once per frame
     void Update()
     {
         _movDirection = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
-
-
         _tether.SetPosition(0, transform.position);
-        _tether.SetPosition(1, _anchor.transform.position);
+        _tether.SetPosition(1, GetAnchor().transform.position);
 
         switch (_movDirection.x)
         {
@@ -62,21 +56,28 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public GameObject GetAnchor()
+    {
+        return _anchor;
+    }
+    public void SetAnchor(ref GameObject anchor)
+    {
+        _anchor = anchor;
+    }
+
     private void FixedUpdate()
     {
-       
-
         Vector2 position = transform.position; //implicitly casting 3D as 2D Vector by reassigning
         Vector2 velocity = _movDirection * _movSpeed;
         Vector2 newPosition = position + velocity * Time.fixedDeltaTime;
 
-
         if (PotentialAnchor != null && Input.GetKeyDown("space"))
         {
-            _anchor = PotentialAnchor;
-            transform.position = _anchor.transform.position;
+            var potAnchor = PotentialAnchor;
+            SetAnchor(ref potAnchor);
+            transform.position = GetAnchor().transform.position;
         }
 
-        _rb.MovePosition(VectorUtils.ClampMagnituteAroundPoint(newPosition, _anchor.transform.position, _tetherLength));
+        _rb.MovePosition(VectorUtils.ClampMagnituteAroundPoint(newPosition, GetAnchor().transform.position, _tetherLength));
     }
 }
