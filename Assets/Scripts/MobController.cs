@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Rendering.Universal;
 
 public class MobController : MonoBehaviour
 {
@@ -52,15 +53,14 @@ public class MobController : MonoBehaviour
             _anim.SetBool("isMoving", Vector3.Distance(_lastPosition, transform.position) > 0); // slightly buggy, stops occasionally
             _lastPosition = transform.position;
         }
+        else if (!_isAlive && IsAnchor)
+        {
+            StartCoroutine(PulseLight());
+        }
         else if (!_isAnchor && PlayerController.Instance.GetAnchor() != gameObject)
         {
             StartCoroutine(Fade(Destroy));
         }
-        else if (!_isAlive && !IsAnchor)
-        {
-            //TODO logic about emphasising potential anchor target - emmision, etc.
-        }
-
     }
 
     void FixedUpdate()
@@ -77,6 +77,7 @@ public class MobController : MonoBehaviour
 
     public void Die()
     {
+        PlayerController.Instance.HasJumped = false;
         GameObject previosAnchor = PlayerController.Instance.PotentialAnchor;
         if (previosAnchor != null)
         {
@@ -102,6 +103,21 @@ public class MobController : MonoBehaviour
             yield return null;
         }
         lastAction.Invoke();
+    }
+
+    private IEnumerator PulseLight()
+    {
+        Light2D light = GetComponent<Light2D>();
+        Debug.Log(light);
+        Debug.Log(light.enabled);
+        light.enabled = true;
+        Color A = Color.cyan;
+        Color B = Color.white;
+        Color lerpedColor = Color.Lerp(A, B, Mathf.PingPong(Time.time, 1));
+        light.intensity = Mathf.Lerp(0,1,Mathf.PingPong(Time.time,1));
+        _sr.material.color = lerpedColor;
+        yield return null;
+
     }
 
     void Destroy()

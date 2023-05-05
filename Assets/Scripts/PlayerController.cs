@@ -12,12 +12,14 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer _sr;
     private GameObject _anchor;
     private GameObject _potentialAnchor;
+    private bool _hasJumped;
 
     //Movement
     private float _movSpeed = 5f;
     private Vector2 _movDirection;
 
     public GameObject PotentialAnchor { get => _potentialAnchor; set => _potentialAnchor = value; }
+    public bool HasJumped { get => _hasJumped; set => _hasJumped = value; }
 
     private void Awake()
     {
@@ -35,6 +37,7 @@ public class PlayerController : MonoBehaviour
         _rb = GetComponent<Rigidbody2D>();
         _sr = GetComponent<SpriteRenderer>();
         _tether = GetComponent<LineRenderer>();
+        _hasJumped = true;
         var anchor = GameObject.FindWithTag("anchor");
         SetAnchor(ref anchor);
     }
@@ -71,11 +74,13 @@ public class PlayerController : MonoBehaviour
         Vector2 velocity = _movDirection * _movSpeed;
         Vector2 newPosition = position + velocity * Time.fixedDeltaTime;
 
-        if (PotentialAnchor != null && Input.GetKeyDown("space"))
+        if (PotentialAnchor != null && Input.GetKeyDown("space") && !_hasJumped)
         {
             var potAnchor = PotentialAnchor;
             SetAnchor(ref potAnchor);
+            potAnchor.GetComponent<MobController>().IsAnchor = false;
             transform.position = GetAnchor().transform.position;
+            _hasJumped = true;
         }
 
         _rb.MovePosition(VectorUtils.ClampMagnituteAroundPoint(newPosition, GetAnchor().transform.position, _tetherLength));
