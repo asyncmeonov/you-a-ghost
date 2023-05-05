@@ -2,7 +2,6 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 
 {
-
     public static PlayerController Instance { get; private set; }
     [SerializeField] private float _tetherLength = 2f;
 
@@ -12,14 +11,16 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer _sr;
     private GameObject _anchor;
     private GameObject _potentialAnchor;
-    private bool _hasJumped;
 
-    //Movement
+    //private variables
     private float _movSpeed = 5f;
     private Vector2 _movDirection;
+    private bool _hasJumped;
+    private int _health;
 
     public GameObject PotentialAnchor { get => _potentialAnchor; set => _potentialAnchor = value; }
     public bool HasJumped { get => _hasJumped; set => _hasJumped = value; }
+    public int Health { get => _health; set => _health = value; }
 
     private void Awake()
     {
@@ -38,6 +39,7 @@ public class PlayerController : MonoBehaviour
         _sr = GetComponent<SpriteRenderer>();
         _tether = GetComponent<LineRenderer>();
         _hasJumped = true;
+        _health = 3;
         var anchor = GameObject.FindWithTag("anchor");
         SetAnchor(ref anchor);
     }
@@ -57,6 +59,15 @@ public class PlayerController : MonoBehaviour
                 _sr.flipX = false;
                 break;
         }
+
+        if (PotentialAnchor != null && Input.GetKeyDown("space") && !_hasJumped)
+        {
+            var potAnchor = PotentialAnchor;
+            SetAnchor(ref potAnchor);
+            potAnchor.GetComponent<MobController>().IsAnchor = false;
+            transform.position = GetAnchor().transform.position;
+            _hasJumped = true;
+        }
     }
 
     public GameObject GetAnchor()
@@ -73,16 +84,6 @@ public class PlayerController : MonoBehaviour
         Vector2 position = transform.position; //implicitly casting 3D as 2D Vector by reassigning
         Vector2 velocity = _movDirection * _movSpeed;
         Vector2 newPosition = position + velocity * Time.fixedDeltaTime;
-
-        if (PotentialAnchor != null && Input.GetKeyDown("space") && !_hasJumped)
-        {
-            var potAnchor = PotentialAnchor;
-            SetAnchor(ref potAnchor);
-            potAnchor.GetComponent<MobController>().IsAnchor = false;
-            transform.position = GetAnchor().transform.position;
-            _hasJumped = true;
-        }
-
-        _rb.MovePosition(VectorUtils.ClampMagnituteAroundPoint(newPosition, GetAnchor().transform.position, _tetherLength));
+        _rb.MovePosition(VectorUtils.ClampMagnituteAroundPointRadial(newPosition, GetAnchor().transform.position, _tetherLength));
     }
 }

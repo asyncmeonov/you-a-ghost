@@ -1,8 +1,10 @@
 using System;
 using System.Collections;
+using UnityEditor.Build;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
+using Random = UnityEngine.Random;
 
 public class MobController : MonoBehaviour
 {
@@ -10,18 +12,19 @@ public class MobController : MonoBehaviour
     [SerializeField] MobDefinition mobDef;
     [SerializeField] GameObject bulletPrefab;
 
-    //Events
-    [SerializeField] UnityEvent _onMobDeath;
-
-    //Private Vars
+    //GameObjects and Mono properties
     private Animator _anim;
     private Vector3 _lastPosition;
     private Rigidbody2D _rb;
     private SpriteRenderer _sr;
     private GameObject _player;
     private GameObject _weaponContainer;
+
+
+    //Private Vars
     private bool _isAlive;
     private bool _isAnchor;
+    private int _currentHealth;
 
     public Rigidbody2D Rb { get => _rb; set => _rb = value; }
     public MobDefinition MobDef { get => mobDef; set => mobDef = value; }
@@ -41,6 +44,7 @@ public class MobController : MonoBehaviour
         _weaponContainer = transform.GetChild(0).gameObject;
         _isAlive = true;
         _isAnchor = false;
+        _currentHealth = MobDef.maxHealth;
         InvokeRepeating("ShootPlayer", mobDef.shootDelay, mobDef.shootFrequency);
 
     }
@@ -75,8 +79,24 @@ public class MobController : MonoBehaviour
         }
     }
 
+    public void Injure()
+    {
+        //TODO animation indicator for injury
+        _currentHealth -= 1;
+        if(_currentHealth <= 0)
+        {
+            Die();
+        }
+        else
+        {
+            StartCoroutine(Shake(0.1f,0.2f));
+        }
+    }
+
     public void Die()
     {
+        GetComponent<Collider2D>().enabled = false;
+        GameController.Instance.Score += MobDef.reward;
         PlayerController.Instance.HasJumped = false;
         GameObject previosAnchor = PlayerController.Instance.PotentialAnchor;
         if (previosAnchor != null)
@@ -90,7 +110,6 @@ public class MobController : MonoBehaviour
         _weaponContainer.SetActive(false);
         CancelInvoke();
         _rb.constraints = RigidbodyConstraints2D.FreezeAll;
-        _onMobDeath.Invoke();
     }
 
     private IEnumerator Fade(Action lastAction = null)
@@ -117,7 +136,20 @@ public class MobController : MonoBehaviour
         light.intensity = Mathf.Lerp(0,1,Mathf.PingPong(Time.time,1));
         _sr.material.color = lerpedColor;
         yield return null;
+    }
 
+    private IEnumerator Shake(float duration = 1f, float magnitude = 1f)
+    {
+        Vector3 originalPos = transform.position;
+        float elapsed = 0.0f;
+        while (elapsed < duration)
+        {
+            transform.position = originalPos + Random.insideUnitSphere * magnitude;
+            transform.position = new Vector3(transform.position.x, transform.position.y, 0);
+            elapsed += Time.deltaTime;
+            yield return null;
+        }
+        transform.position = originalPos;
     }
 
     void Destroy()

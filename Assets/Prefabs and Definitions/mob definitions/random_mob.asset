@@ -12,9 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08111a384d04ab64180cc2200836102f, type: 3}
   m_Name: random_mob
   m_EditorClassIdentifier: 
-  animController: {fileID: 0}
   shootFrequency: 1
   shootDelay: 2
   movSpeed: 3
+  maxHealth: 2
+  reward: 1
   projectile: {fileID: 11400000, guid: 14f6df4624146ad43be9684de628847d, type: 2}
   mobBrain: {fileID: 11400000, guid: 447ab4357eccf074ea5d3afadec2d034, type: 2}

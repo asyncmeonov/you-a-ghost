@@ -17,12 +17,18 @@ public static class VectorUtils
         return Quaternion.RotateTowards(source.transform.rotation, targetRotation, rotSpeed * Time.deltaTime);
     }
 
-    public static Vector2 ClampMagnituteAroundPoint(Vector2 target, Vector2 pivot, float max)
+    public static Vector2 ClampMagnituteAroundPointLinear(Vector2 target, Vector2 pivot, float max)
     {
         //consider making it radial?
         target.x = Math.Clamp(target.x, pivot.x - max, pivot.x + max);
         target.y = Math.Clamp(target.y, pivot.y - max, pivot.y + max);
 
         return target;
+    }
+
+    public static Vector2 ClampMagnituteAroundPointRadial(Vector2 target, Vector2 pivot, float max)
+    {
+        var offset = target - pivot;
+        return pivot + Vector2.ClampMagnitude(offset, max);
     }
 }
