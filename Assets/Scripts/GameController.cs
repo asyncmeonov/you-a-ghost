@@ -26,5 +26,6 @@ public class GameController : MonoBehaviour
         Application.targetFrameRate = 60;
         Cursor.SetCursor(cursorTexture, _hotSpot, _cursorMode);
         _score = 0;
+        SoundController.Instance.MainMusic.Play();
     }
 }

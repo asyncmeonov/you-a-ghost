@@ -71,9 +71,9 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingLayerID: 1237578509
+  m_SortingLayer: 3
+  m_SortingOrder: 3
   m_Sprite: {fileID: 3191422588114293079, guid: bfdb48c2643a7764f8581cf7da1f8053, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -213,8 +213,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1237578509
+  m_SortingLayer: 3
   m_SortingOrder: 2
   m_Sprite: {fileID: 833012354, guid: 9cbceb2295b9afd4dbac3128123a358c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -288,33 +288,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mobDef: {fileID: 11400000, guid: 3867a9f94e3721c45bbb52dfc6bd2971, type: 2}
   bulletPrefab: {fileID: 7954158701103338195, guid: 4d142684702f41e43a81106d302fc832, type: 3}
-  _onMobDeath:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 6495382049491946269}
-        m_TargetAssemblyTypeName: MobController, Assembly-CSharp
-        m_MethodName: set_IsAnchorTarget
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
-        m_MethodName: set_PotentialAnchor
-        m_Mode: 2
-        m_Arguments:
-          m_ObjectArgument: {fileID: 6495382049491946263}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
 --- !u!114 &6495382049491946266
 MonoBehaviour:
   m_ObjectHideFlags: 0

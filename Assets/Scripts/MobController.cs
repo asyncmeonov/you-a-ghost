@@ -1,8 +1,6 @@
 using System;
 using System.Collections;
-using UnityEditor.Build;
 using UnityEngine;
-using UnityEngine.Events;
 using UnityEngine.Rendering.Universal;
 using Random = UnityEngine.Random;
 
@@ -95,6 +93,7 @@ public class MobController : MonoBehaviour
 
     public void Die()
     {
+        SoundController.Instance.MobDeath.Play();
         GetComponent<Collider2D>().enabled = false;
         GameController.Instance.Score += MobDef.reward;
         PlayerController.Instance.HasJumped = false;

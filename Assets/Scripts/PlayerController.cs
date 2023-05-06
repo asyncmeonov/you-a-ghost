@@ -62,6 +62,7 @@ public class PlayerController : MonoBehaviour
 
         if (PotentialAnchor != null && Input.GetKeyDown("space") && !_hasJumped)
         {
+            SoundController.Instance.Teleport.Play();
             var potAnchor = PotentialAnchor;
             SetAnchor(ref potAnchor);
             potAnchor.GetComponent<MobController>().IsAnchor = false;

@@ -14,8 +14,8 @@ public class BulletController : MonoBehaviour
 
     private void Start()
     {
+        SoundController.Instance.PlayerGunShot.Play();
         _rb = GetComponent<Rigidbody2D>();
-
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector3 shootDir = mousePos - transform.position;
         Vector3 rotation = transform.position - mousePos;

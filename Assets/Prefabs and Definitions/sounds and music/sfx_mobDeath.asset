@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49176eddc4ba06241934a037d5d67558, type: 3}
+  m_Name: sfx_mobDeath
+  m_EditorClassIdentifier: 
+  volume: {x: 1, y: 1}
+  pitch: {x: 1.2, y: 1.2}
+  loop: 0
+  mixGroup: {fileID: -5791494770016017324, guid: bc5b2fee432bf724da59225e551762b1, type: 2}
+  clips:
+  - {fileID: 8300000, guid: 463030bd735ae5e42ac87197c856210b, type: 3}
+  playbackType: 1
+  pitchAlterationType: 1
