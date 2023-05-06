@@ -10,6 +10,7 @@ TagManager:
   - nozzle
   - anchor
   - spawn_point
+  - gun_container
   layers:
   - Default
   - TransparentFX

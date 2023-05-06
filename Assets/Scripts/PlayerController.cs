@@ -71,6 +71,25 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void Injure()
+    {
+        SoundController.Instance.PlayerHit.Play();
+        _health -= 1;
+        if (_health <= 0) 
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        GetComponent<Collider2D>().enabled = false;
+        GetComponent<LineRenderer>().enabled = false;
+        GameObject.FindWithTag("gun_container").SetActive(false);
+        _tetherLength = 1000f;
+        GameController.Instance.GameOver();
+    }
+
     public GameObject GetAnchor()
     {
         return _anchor;

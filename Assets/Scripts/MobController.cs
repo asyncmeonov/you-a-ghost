@@ -79,7 +79,6 @@ public class MobController : MonoBehaviour
 
     public void Injure()
     {
-        //TODO animation indicator for injury
         _currentHealth -= 1;
         if(_currentHealth <= 0)
         {

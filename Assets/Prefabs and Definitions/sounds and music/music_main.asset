@@ -17,3 +17,4 @@ MonoBehaviour:
   loop: 1
   mixGroup: {fileID: 1365399453217417600, guid: bc5b2fee432bf724da59225e551762b1, type: 2}
   clip: {fileID: 8300000, guid: 6e29a51d2aa0af841aa76a942ec7996b, type: 3}
+  persist: 0

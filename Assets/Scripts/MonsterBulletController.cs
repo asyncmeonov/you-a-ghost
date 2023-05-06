@@ -28,7 +28,7 @@ public class MonsterBulletController : MonoBehaviour
         if (collision.gameObject.tag == "player")
         {
             //logic to handle hitting a player
-            PlayerController.Instance.Health -= 1;
+            PlayerController.Instance.Injure();
             DestroyBullet();
         }
 

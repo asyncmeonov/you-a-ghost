@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49176eddc4ba06241934a037d5d67558, type: 3}
-  m_Name: sfx_teleport
+  m_Name: sfx_playerhit
   m_EditorClassIdentifier: 
-  volume: {x: 0.7, y: 0.7}
-  pitch: {x: 1.4, y: 1.8}
+  volume: {x: 0.5, y: 0.5}
+  pitch: {x: 1.2, y: 1.2}
   loop: 0
   mixGroup: {fileID: -5791494770016017324, guid: bc5b2fee432bf724da59225e551762b1, type: 2}
   clips:
-  - {fileID: 8300000, guid: 06ea59ffa3b928845aeb49c0aaee0f8a, type: 3}
-  playbackType: 1
-  pitchAlterationType: 1
+  - {fileID: 8300000, guid: 28976d038a46ec3449da582fc3cabb11, type: 3}
+  playbackType: 0
+  pitchAlterationType: 0

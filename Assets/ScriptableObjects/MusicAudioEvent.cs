@@ -5,6 +5,7 @@ public class MusicAudioEvent : AudioEvent
 {
     #region config
     public AudioClip clip;
+    public bool persist;
 
     #endregion
 
@@ -31,6 +32,8 @@ public class MusicAudioEvent : AudioEvent
         source.pitch = Random.Range(pitch.x, pitch.y);
 
         source.Play();
+
+        if (persist) DontDestroyOnLoad(source.gameObject);
 
         //return configurations if we want to modify them externally
         return source.gameObject;
