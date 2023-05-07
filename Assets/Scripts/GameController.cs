@@ -5,7 +5,6 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
@@ -16,12 +15,19 @@ public class GameController : MonoBehaviour
     [SerializeField] Texture2D shootCursorTexture;
     [SerializeField] Texture2D menuCursorTexture;
 
-    //screens
+    //screens in game
     [SerializeField] GameObject gameOverScreen;
     [SerializeField] GameObject saveScoreScreen;
 
+    //screens in main menu
+    [SerializeField] GameObject mainMenuScreen;
+    [SerializeField] GameObject settingsScreen;
+    [SerializeField] GameObject leaderboardScreen;
+
     //fields
+    [SerializeField] GameObject[] currentGameScoreDisplayFields;
     [SerializeField] GameObject highScoreInputField;
+    [SerializeField] GameObject highScoreDisplayField;
 
     //private vars
     private string _leaderboardPath = "Assets/leaderboard.txt";
@@ -42,7 +48,11 @@ public class GameController : MonoBehaviour
     }
     private void Start()
     {
-        Cursor.SetCursor(menuCursorTexture, _hotSpot, _cursorMode);
+        switch (SceneManager.GetActiveScene().buildIndex)
+        {
+            case 1: Cursor.SetCursor(shootCursorTexture, _hotSpot, _cursorMode); break;
+            default: Cursor.SetCursor(menuCursorTexture, _hotSpot, _cursorMode); break;
+        }
         Application.targetFrameRate = 60;
         SoundController.Instance.MainMusic.Play();
     }
@@ -50,7 +60,6 @@ public class GameController : MonoBehaviour
     public void StartGame()
     {
         _score = 0;
-        Cursor.SetCursor(shootCursorTexture, _hotSpot, _cursorMode);
         SceneManager.LoadScene(1);
     }
 
@@ -58,17 +67,61 @@ public class GameController : MonoBehaviour
     {
         gameOverScreen.SetActive(true);
         Cursor.SetCursor(menuCursorTexture, _hotSpot, _cursorMode);
+        foreach (var field in currentGameScoreDisplayFields)
+        {
+            field.GetComponent<TextMeshProUGUI>().text = Score.ToString().PadLeft(4, '0');
+        }
     }
 
     public void GoToMainMenu()
     {
-        _score = 0;
-        SceneManager.LoadScene(0);
+
+        if (SceneManager.GetActiveScene().buildIndex == 0)
+        {
+            CloseAllInMainMenu();
+            mainMenuScreen.SetActive(true);
+        }
+        else
+        {
+            _score = 0;
+            SceneManager.LoadScene(0);
+        }
+
 
     }
+
+    public void ShowSettingsMenu()
+    {
+        CloseAllInMainMenu();
+        settingsScreen.SetActive(true);
+    }
+
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+
+    public void ShowLeaderboardScreen()
+    {
+        CloseAllInMainMenu();
+        TextMeshProUGUI leaderboardList = highScoreDisplayField.GetComponent<TextMeshProUGUI>();
+        List<Tuple<string, int>> leaderboard = GetLeaderboardFromFile();
+        List<Tuple<string, int>> topTen = leaderboard.OrderBy(s => s.Item2).Reverse().Take(10).ToList();
+
+        leaderboardList.text = "";
+
+        foreach (var item in topTen)
+        {
+            string row = item.Item2.ToString().PadLeft(4, '0') + " - " + item.Item1 + "\n";
+            leaderboardList.text += row;
+        }
+
+        leaderboardScreen.SetActive(true);
+    }
+
     public void ShowSaveScoreScreen()
     {
-        gameOverScreen.SetActive(false);
+        CloseAllInGame();
         saveScoreScreen.SetActive(true);
     }
     public void SaveScore()
@@ -105,6 +158,19 @@ public class GameController : MonoBehaviour
             Debug.Log("Exception reading file: " + e.Message);
             return leaderboard;
         }
+    }
+
+    private void CloseAllInMainMenu()
+    {
+        mainMenuScreen.SetActive(false);
+        settingsScreen.SetActive(false);
+        leaderboardScreen?.SetActive(false);
+    }
+
+    private void CloseAllInGame()
+    {
+        gameOverScreen?.SetActive(false);
+        saveScoreScreen?.SetActive(false);
     }
 
 
