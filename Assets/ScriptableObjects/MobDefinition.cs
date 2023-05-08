@@ -10,4 +10,6 @@ public class MobDefinition : ScriptableObject
     public int reward; //how many score points it awards for being slain
     public ProjectileDefinition projectile; //definition of his attack
     public Brain mobBrain; //AI movement logic
+    public float size; //factor for how big the sprite is
+    public int cr; //Challenge Rating - a somewhat biased estimate of how difficult this mob is
 }

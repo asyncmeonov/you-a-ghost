@@ -1,5 +1,12 @@
-using UnityEditor.Animations;
 using UnityEngine;
+
+
+public enum AttackType
+{
+    LinearAim,
+    Radial,
+    Random
+}
 
 [CreateAssetMenu(fileName = "projectile_newProjectileDef", menuName = "Projectile/New Projectile Definition")]
 public class ProjectileDefinition : ScriptableObject
@@ -11,8 +18,11 @@ public class ProjectileDefinition : ScriptableObject
     public float size; 
 
     //how many projectiles at once does it shoot. Consider adding a new field for different spread patterns
-    public float count;
+    public int count;
 
     //how fast does the projectile travel
     public float speed;
+
+    //type
+    public AttackType attack;
 }

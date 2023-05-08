@@ -7,7 +7,7 @@ public class BulletController : MonoBehaviour
 
     //consider using a bullet scriptable object for different bullet types
 
-    private float _speed = 10f;
+    private float _speed = 20f;
 
     private Rigidbody2D _rb;
 

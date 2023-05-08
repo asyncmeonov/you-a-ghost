@@ -10,12 +10,14 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 08111a384d04ab64180cc2200836102f, type: 3}
-  m_Name: chase_mob
+  m_Name: cr1_roaming 2
   m_EditorClassIdentifier: 
-  shootFrequency: 1
-  shootDelay: 2
+  shootFrequency: 4
+  shootDelay: 1
   movSpeed: 3
   maxHealth: 1
-  reward: 1
-  projectile: {fileID: 11400000, guid: 14f6df4624146ad43be9684de628847d, type: 2}
-  mobBrain: {fileID: 11400000, guid: 86e60c20c717e4e418bc84f5a7717348, type: 2}
+  reward: 2
+  projectile: {fileID: 11400000, guid: 256c89eeee53fef47b725943fb4a4373, type: 2}
+  mobBrain: {fileID: 11400000, guid: 783bee9c352ceba4cbd77dc2a976ffbb, type: 2}
+  size: 1
+  cr: 1

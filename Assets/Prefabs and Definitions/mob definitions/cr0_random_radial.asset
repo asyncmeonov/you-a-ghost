@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08111a384d04ab64180cc2200836102f, type: 3}
+  m_Name: cr0_random_radial
+  m_EditorClassIdentifier: 
+  shootFrequency: 1
+  shootDelay: 1
+  movSpeed: 2
+  maxHealth: 1
+  reward: 2
+  projectile: {fileID: 11400000, guid: 5db46f0ef03adb241b7ed5f6aa0b6d87, type: 2}
+  mobBrain: {fileID: 11400000, guid: 447ab4357eccf074ea5d3afadec2d034, type: 2}
+  size: 1
+  cr: 0

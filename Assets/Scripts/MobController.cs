@@ -43,7 +43,8 @@ public class MobController : MonoBehaviour
         _isAlive = true;
         _isAnchor = false;
         _currentHealth = MobDef.maxHealth;
-        InvokeRepeating("ShootPlayer", mobDef.shootDelay, mobDef.shootFrequency);
+        transform.localScale = new Vector2(mobDef.size, mobDef.size);
+        InvokeRepeating("ShootPlayer"+mobDef.projectile.attack.ToString(), mobDef.shootDelay, mobDef.shootFrequency); //Change string for different bullet patterns
 
     }
 
@@ -125,8 +126,6 @@ public class MobController : MonoBehaviour
     private IEnumerator PulseLight()
     {
         Light2D light = GetComponent<Light2D>();
-        Debug.Log(light);
-        Debug.Log(light.enabled);
         light.enabled = true;
         Color A = Color.cyan;
         Color B = Color.white;
@@ -155,9 +154,63 @@ public class MobController : MonoBehaviour
         Destroy(gameObject);
     }
 
-    void ShootPlayer()
+    void ShootPlayerLinearAim()
     {
         Vector3 _projectileOrigin = _weaponContainer.transform.GetChild(0).GetChild(0).position; //nasty-ass way for retrieval of inner-most child
-        Instantiate(bulletPrefab, _projectileOrigin, Quaternion.identity);
+        for (int i = 0; i < mobDef.projectile.count; i++)
+        {
+            var proj = Instantiate(bulletPrefab, _projectileOrigin, Quaternion.identity);
+
+        Rigidbody2D _projRb = proj.GetComponent<Rigidbody2D>();
+        _player = GameObject.FindGameObjectWithTag("player");
+
+        Vector3 playerPos = new Vector3(_player.transform.position.x, _player.transform.position.y + 1f);
+        Vector3 shootDir = playerPos - transform.position;
+        Vector3 rotation = transform.position - playerPos;
+        _projRb.velocity = new Vector2(shootDir.x, shootDir.y).normalized * MobDef.projectile.speed;
+        float rot = Mathf.Atan2(rotation.x, rotation.y) * Mathf.Rad2Deg;
+        proj.transform.rotation = Quaternion.Euler(0, 0, rot); //rot param expects the bullet to be horizontal pointing right. Adjust angles by adding degrees if sprite is different
+        proj.transform.localScale = new Vector2(mobDef.projectile.size, mobDef.projectile.size);
+        }
+    }
+
+    void ShootPlayerRadial()
+    {
+        Vector2 _projectileOrigin = _weaponContainer.transform.GetChild(0).GetChild(0).position; //nasty-ass way for retrieval of inner-most child
+        int _numberOfProjectiles = MobDef.projectile.count;
+        float _radius = 5f;
+        float angleStep = 360f / _numberOfProjectiles;
+        float angle = 0f;
+
+        for (int i = 0; i <= _numberOfProjectiles - 1; i++)
+        {
+
+            float projectileDirXposition = _projectileOrigin.x + Mathf.Sin((angle * Mathf.PI) / 180) * _radius;
+            float projectileDirYposition = _projectileOrigin.y + Mathf.Cos((angle * Mathf.PI) / 180) * _radius;
+
+            Vector2 projectileVector = new Vector2(projectileDirXposition, projectileDirYposition);
+            Vector2 projectileMoveDirection = (projectileVector - _projectileOrigin).normalized * MobDef.projectile.speed;
+
+            var proj = Instantiate(bulletPrefab, _projectileOrigin, Quaternion.identity);
+            proj.GetComponent<Rigidbody2D>().velocity =
+                new Vector2(projectileMoveDirection.x, projectileMoveDirection.y);
+            proj.transform.localScale = new Vector2(mobDef.projectile.size, mobDef.projectile.size);
+
+            angle += angleStep;
+        }
+    }
+
+    void ShootPlayerRandom()
+    {
+        Vector3 _projectileOrigin = _weaponContainer.transform.GetChild(0).GetChild(0).position; //nasty-ass way for retrieval of inner-most child
+        var proj = Instantiate(bulletPrefab, _projectileOrigin, Quaternion.identity);
+        Rigidbody2D _projRb = proj.GetComponent<Rigidbody2D>();
+        Vector3 randomDir = new Vector3(Random.value, Random.value, 0).normalized;
+        Vector3 shootDir = randomDir - transform.position;
+        Vector3 rotation = transform.position - randomDir;
+        _projRb.velocity = new Vector2(shootDir.x, shootDir.y).normalized * MobDef.projectile.speed;
+        float rot = Mathf.Atan2(rotation.x, rotation.y) * Mathf.Rad2Deg;
+        proj.transform.rotation = Quaternion.Euler(0, 0, rot); //rot param expects the bullet to be horizontal pointing right. Adjust angles by adding degrees if sprite is different
+        proj.transform.localScale = new Vector2(mobDef.projectile.size, mobDef.projectile.size);
     }
 }

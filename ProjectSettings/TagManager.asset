@@ -11,6 +11,7 @@ TagManager:
   - anchor
   - spawn_point
   - gun_container
+  - roaming_point
   layers:
   - Default
   - TransparentFX
