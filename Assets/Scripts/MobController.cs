@@ -71,7 +71,7 @@ public class MobController : MonoBehaviour
         if (_isAlive)
         {
             //Logic for pointing towards player
-            Vector3 playerPos = new Vector3(_player.transform.position.x, _player.transform.position.y + 1f); //offset in y so it shoots at the centre
+            Vector3 playerPos = new Vector3(_player.transform.position.x, _player.transform.position.y);
             Transform containerTransform = _weaponContainer.transform;
             containerTransform.rotation = VectorUtils.GetQuaternionRotationTowards(containerTransform, playerPos);
             _sr.flipX = playerPos.x <= transform.position.x; //flip sprite to face player
@@ -164,7 +164,7 @@ public class MobController : MonoBehaviour
         Rigidbody2D _projRb = proj.GetComponent<Rigidbody2D>();
         _player = GameObject.FindGameObjectWithTag("player");
 
-        Vector3 playerPos = new Vector3(_player.transform.position.x, _player.transform.position.y + 1f);
+        Vector3 playerPos = new Vector3(_player.transform.position.x, _player.transform.position.y);
         Vector3 shootDir = playerPos - transform.position;
         Vector3 rotation = transform.position - playerPos;
         _projRb.velocity = new Vector2(shootDir.x, shootDir.y).normalized * MobDef.projectile.speed;

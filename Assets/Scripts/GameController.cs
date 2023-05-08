@@ -6,6 +6,9 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
+using System.Runtime.Serialization.Formatters.Binary;
+using UnityEngine.Playables;
+using System.IO.Pipes;
 
 public class GameController : MonoBehaviour
 {
@@ -34,7 +37,6 @@ public class GameController : MonoBehaviour
     [SerializeField] GameObject highScoreDisplayField;
 
     //private vars
-    private string _leaderboardPath = "Assets/leaderboard.txt";
     private CursorMode _cursorMode = CursorMode.Auto;
     private Vector2 _hotSpot = Vector2.zero;
     private int _score;
@@ -59,6 +61,13 @@ public class GameController : MonoBehaviour
         }
         Application.targetFrameRate = 60;
         SoundController.Instance.MainMusic.Play();
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown("escape"))
+        {
+            Application.Quit();
+        }
     }
 
     public void StartGame()
@@ -137,7 +146,15 @@ public class GameController : MonoBehaviour
     public void WriteHighscoreToLeaderboard()
     {
         string playerName = highScoreInputField.GetComponent<TMP_InputField>().text;
-        File.AppendAllText(_leaderboardPath, string.Format("{0}|{1}\n", playerName, Instance.Score));
+        string destination = Application.persistentDataPath + "/save.dat";
+
+
+        if (!File.Exists(destination))
+        {
+            File.Create(destination).Dispose();
+        }
+
+        File.AppendAllText(destination, string.Format("{0}|{1}\n", playerName, Instance.Score));
     }
 
     public void SetMusicVolume(float value)
@@ -153,26 +170,28 @@ public class GameController : MonoBehaviour
 
     private List<Tuple<string, int>> GetLeaderboardFromFile()
     {
+
         List<Tuple<string, int>> leaderboard = new List<Tuple<string, int>>();
-        string line;
-        try
+        string destination = Application.persistentDataPath + "/save.dat";
+
+        if (!File.Exists(destination))
         {
-            StreamReader sr = new StreamReader(_leaderboardPath);
-            while ((line = sr.ReadLine()) != null)
-            {
-                string player = line.Substring(0, line.LastIndexOf('|'));
-                string score = line.Substring(line.LastIndexOf('|') + 1);
-                Tuple<string, int> entry = new Tuple<string, int>(player, int.Parse(score));
-                leaderboard.Add(entry);
-            }
-            sr.Close();
             return leaderboard;
         }
-        catch (Exception e)
+
+        string data = File.ReadAllText(destination);
+
+
+        string[] entries = data.Split('\n').Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+        foreach (string line in entries)
         {
-            Debug.Log("Exception reading file: " + e.Message);
-            return leaderboard;
+            string player = line.Substring(0, line.LastIndexOf('|'));
+            string score = line.Substring(line.LastIndexOf('|') + 1);
+            Tuple<string, int> entry = new Tuple<string, int>(player, int.Parse(score));
+            leaderboard.Add(entry);
         }
+        return leaderboard;
     }
 
     private void CloseAllInMainMenu()
