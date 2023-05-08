@@ -15,7 +15,7 @@ MonoBehaviour:
   shootFrequency: 1
   shootDelay: 1
   movSpeed: 2
-  maxHealth: 1
+  maxHealth: 2
   reward: 2
   projectile: {fileID: 11400000, guid: 5db46f0ef03adb241b7ed5f6aa0b6d87, type: 2}
   mobBrain: {fileID: 11400000, guid: 447ab4357eccf074ea5d3afadec2d034, type: 2}

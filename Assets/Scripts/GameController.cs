@@ -5,11 +5,15 @@ using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Audio;
 
 public class GameController : MonoBehaviour
 {
     public static GameController Instance { get; private set; }
     public int Score { get => _score; set => _score = value; }
+
+    //audio
+    [SerializeField] AudioMixer _mixer;
 
     //cursors
     [SerializeField] Texture2D shootCursorTexture;
@@ -134,6 +138,17 @@ public class GameController : MonoBehaviour
     {
         string playerName = highScoreInputField.GetComponent<TMP_InputField>().text;
         File.AppendAllText(_leaderboardPath, string.Format("{0}|{1}\n", playerName, Instance.Score));
+    }
+
+    public void SetMusicVolume(float value)
+    {
+        _mixer.SetFloat("MusicVol", Mathf.Log10(value) * 20);
+    }
+
+    public void SetSoundEffectsVolume(float value)
+    {
+        _mixer.SetFloat("SFXVol", Mathf.Log10(value) * 20);
+        SoundController.Instance.PlayerGunShot.Play();
     }
 
     private List<Tuple<string, int>> GetLeaderboardFromFile()
